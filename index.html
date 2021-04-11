@@ -7,11 +7,11 @@
 	</head>
 	
 	<body>
-		
+	<h3>h3</h3>	
 	</body>
 	<script>
 	  width = 800;
-	  height = 600;
+	  height = 200;
 	  
 	  const svg = d3.select("body")
 	    .append("svg")
@@ -19,7 +19,7 @@
 	    .attr("height", height);
 	    
     const xScale = d3.scaleTime();
-	    
+
     const xAxis = d3
       .axisBottom()
       .scale(xScale)
@@ -29,29 +29,38 @@
     const rowConverter = function (d) {
       return {
         url: d.url,
-        date: d.date,
+        date: new Date(d.date),
         thumbnail: d.thumbnail
         }
     };  
-          
-    d3.csv('articles.csv', rowConverter).then( (data) => {
+    
+    d3.select("body").append("a");
+    d3.select("body").append("img");
+  
+    d3.csv('https://raw.githubusercontent.com/jtr13/d3nyt/main/data/articles.csv', rowConverter).then( (data) => {
       console.log(data);
+    
+    xScale.domain(d3.extent(data, d => d.date))
+      .range([0, width])
+      .nice();
+      
+    svg.append("g")
+      .attr("class", "xAxis")
+      .call(xAxis);
+  
 
-    const circles = g.selectAll('circle').data(data);
-        circles
+    const circles = svg.selectAll('circle').data(data)
           .enter()
           .append('circle')
           .attr('fill-opacity', 0.6)
           .attr('r', 6)
           .attr('cx', d => xScale(d.date))
-          .attr('cy', 200)
-          .on("mouseover", d => {
-         g.append("text")
-        .attr("x", "50")
-          .attr("y", "50")
-          .text(d.url);});
-
-
+          .attr('cy', 100)
+          .on("mouseover", function(event, d) {
+            console.log(d.url);
+            d3.select("a").attr("href", d.url).text(d.url);
+            d3.select("img").attr("src", d.thumbnail);
+            });
       }).catch(function(error) {
   
 // error handling  

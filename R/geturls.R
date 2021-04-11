@@ -24,7 +24,7 @@ library(lubridate)
 
 # nyti.ms <- x[str_detect(x, "nyti.ms")] %>% expand_urls()
 # writeLines(nyti.ms$expanded_url, "nyti.ms.txt")
-expanded <- readLines("nyti.ms.txt") %>% 
+expanded <- readLines("data/nyti.ms.txt") %>% 
   str_subset(".com/interactive") %>% 
   str_remove("\\?.*$") %>% 
   unique()

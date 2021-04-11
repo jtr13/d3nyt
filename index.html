@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>EDAV3</title>
+		<script src="https://d3js.org/d3.v6.min.js"></script> 
+	</head>
+	
+	<body>
+		
+	</body>
+	<script>
+	  width = 800;
+	  height = 600;
+	  
+	  const svg = d3.select("body")
+	    .append("svg")
+	    .attr("width", width)
+	    .attr("height", height);
+	    
+    const xScale = d3.scaleTime();
+	    
+    const xAxis = d3
+      .axisBottom()
+      .scale(xScale)
+      .tickPadding(15)
+      .ticks(5);
+
+    const rowConverter = function (d) {
+      return {
+        url: d.url,
+        date: d.date,
+        thumbnail: d.thumbnail
+        }
+    };  
+          
+    d3.csv('articles.csv', rowConverter).then( (data) => {
+      console.log(data);
+
+    const circles = g.selectAll('circle').data(data);
+        circles
+          .enter()
+          .append('circle')
+          .attr('fill-opacity', 0.6)
+          .attr('r', 6)
+          .attr('cx', d => xScale(d.date))
+          .attr('cy', 200)
+          .on("mouseover", d => {
+         g.append("text")
+        .attr("x", "50")
+          .attr("y", "50")
+          .text(d.url);});
+
+
+      }).catch(function(error) {
+  
+// error handling  
+  
+  });
+		
+	</script>
+	
+</html>
+	

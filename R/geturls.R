@@ -70,14 +70,16 @@ get_thumburl <- function(url) {
 
 # sample csv
 
-urls <- head(expanded)
+url <- head(expanded, 50)
 
-date <- urls %>% 
+date <- url %>% 
   str_extract("20[/0-9]+[0-9]")
 date[nchar(date)==4] <- paste0(date, "/01/01")
 
-thumbnails <- unlist(lapply(urls, get_thumburl))
+thumbnail <- unlist(lapply(url, get_thumburl))
 
+df <- data.frame(url, date, thumbnail)
+write_csv(df, "data/articles.csv")
 
 # categories
 
